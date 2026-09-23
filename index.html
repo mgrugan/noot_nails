@@ -151,13 +151,6 @@
     width: 40px; height: 1px;
     background: var(--ink);
   }
-  .eyebrow .pink-dot {
-    width: 6px; height: 6px;
-    background: var(--pink);
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 12px rgba(255, 77, 133, 0.7);
-  }
 
   /* MAIN TITLE — "Noor Nails" in bubble font */
   h1 {
@@ -571,29 +564,32 @@
   .btn-ghost:hover { background: var(--ink); color: var(--surface); }
 
   /* ADMIN */
-  .admin-section {
-    margin-top: 4rem;
-    padding-top: 4rem;
-    border-top: 1px dashed var(--ink);
+  /* Admin lives in an overlay opened from the footer */
+  .admin-overlay { align-items: flex-start; overflow-y: auto; }
+  .admin-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 880px;
+    margin: 3vh auto;
   }
-  .admin-toggle { text-align: center; }
-  .admin-toggle-btn {
-    background: transparent;
+  .admin-close {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    z-index: 2;
+    width: 36px; height: 36px;
+    border-radius: 50%;
     border: 1px solid var(--ink);
+    background: var(--surface);
     color: var(--ink);
-    padding: 0.65rem 1.5rem;
-    border-radius: 999px;
+    font-size: 1.2rem;
+    line-height: 1;
     cursor: pointer;
-    font-family: 'Manrope', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-    font-weight: 600;
+    box-shadow: 2px 2px 0 var(--ink);
   }
-  .admin-toggle-btn:hover { background: var(--ink); color: var(--surface); }
+  .admin-close:hover { background: var(--ink); color: var(--surface); }
 
-  .admin-login, .admin-panel { display: none; margin-top: 2.5rem; }
+  .admin-login, .admin-panel { display: none; }
   .admin-login.active, .admin-panel.active { display: block; }
 
   .admin-login-card, .admin-panel-card {
@@ -605,6 +601,7 @@
   }
   .admin-login-card { max-width: 420px; margin: 0 auto; }
   .admin-panel-card { position: relative; }
+  .admin-panel-card .logout-btn { right: 3.5rem; }
 
   .admin-form-row {
     display: grid;
@@ -743,19 +740,59 @@
   .error-msg { color: #c43d3d; font-size: 0.82rem; margin-top: 0.75rem; display: none; }
   .error-msg.show { display: block; }
 
-  footer {
+  .site-footer {
+    position: relative;
+    z-index: 5;
+    border-top: 1px solid var(--ink);
+    background: var(--surface);
+    padding: 2.5rem 2rem 1.5rem;
+  }
+  .footer-inner {
+    max-width: 1080px;
+    margin: 0 auto;
     text-align: center;
-    padding: 4rem 1rem 3rem;
+  }
+  .footer-brand {
     font-family: 'Bagel Fat One', sans-serif;
     font-size: 2rem;
     color: var(--bubble-pink);
     -webkit-text-stroke: 2px var(--ink);
-    position: relative;
-    z-index: 5;
-    letter-spacing: 0;
     line-height: 1;
   }
-  footer .nails-accent { color: var(--pink); }
+  .footer-brand .nails-accent { color: var(--pink); }
+  .footer-meta {
+    margin-top: 0.6rem;
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .footer-bottom {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .footer-admin {
+    background: none;
+    border: none;
+    padding: 0.25rem 0;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .footer-admin:hover { color: var(--ink); border-bottom-color: var(--ink); }
 
   .reveal {
     opacity: 0;
@@ -778,6 +815,8 @@
     .modal { padding: 2rem; }
     .admin-panel-card, .admin-login-card { padding: 2rem 1.5rem; }
     .logout-btn { top: 1.5rem; right: 1.5rem; }
+    .admin-panel-card .logout-btn { top: auto; bottom: 1.5rem; right: 1.5rem; }
+    .admin-panel-card { padding-bottom: 4.5rem; }
     .tab-bar { gap: 1.25rem; overflow-x: auto; }
     .hero { padding: 3rem 1.5rem 2rem; }
     .booking-card, .admin-panel-card, .admin-login-card, .modal {
@@ -799,7 +838,6 @@
 <section class="hero">
   <div class="hero-content">
     <div class="eyebrow reveal reveal-1">
-      <span class="pink-dot"></span>
       Nail studio · By appointment
     </div>
     <div class="pre-title reveal reveal-2">welcome to <span class="star">✦</span></div>
@@ -829,10 +867,38 @@
     </div>
   </section>
 
-  <section class="admin-section" id="adminSection">
-    <div class="admin-toggle">
-      <button class="admin-toggle-btn" id="adminToggleBtn">Admin Access</button>
+</main>
+
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal">
+    <div class="modal-header">Reserve your <span class="display-i" style="color: var(--pink);">time</span></div>
+    <div class="modal-sub" id="modalSlotInfo">—</div>
+
+    <div class="form-group">
+      <label>Your name</label>
+      <input type="text" id="bookName" placeholder="Jane Doe" />
     </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="bookEmail" placeholder="you@example.com" />
+    </div>
+    <div class="form-group">
+      <label>Phone</label>
+      <input type="tel" id="bookPhone" placeholder="555 123 4567" />
+    </div>
+    <div class="form-group">
+      <label>Notes <span style="text-transform: none; letter-spacing: 0; color: var(--muted); font-weight: 400;">(optional)</span></label>
+      <textarea id="bookNotes" placeholder="Color requests, allergies, anything else"></textarea>
+    </div>
+    <div class="error-msg" id="bookingError">Please fill in all required fields.</div>
+    <button class="btn" id="confirmBookingBtn" style="margin-top: 1.25rem;">Confirm booking</button>
+    <button class="btn btn-ghost" id="cancelBookingBtn">Cancel</button>
+  </div>
+</div>
+
+<div class="modal-overlay admin-overlay" id="adminOverlay" role="dialog" aria-modal="true" aria-label="Admin">
+  <div class="admin-wrap">
+    <button class="admin-close" id="adminCloseBtn" aria-label="Close">×</button>
 
     <div class="admin-login" id="adminLogin">
       <div class="admin-login-card">
@@ -846,7 +912,7 @@
           <label>Password</label>
           <input type="password" id="loginPass" autocomplete="current-password" />
         </div>
-        <div class="error-msg" id="loginError">Incorrect username or password.</div>
+        <div class="error-msg" id="loginError">Incorrect email or password.</div>
         <button class="btn" id="loginBtn" style="margin-top: 1rem;">Sign in</button>
       </div>
     </div>
@@ -905,40 +971,20 @@
         </div>
       </div>
     </div>
-  </section>
-</main>
-
-<div class="modal-overlay" id="bookingModal">
-  <div class="modal">
-    <div class="modal-header">Reserve your <span class="display-i" style="color: var(--pink);">time</span></div>
-    <div class="modal-sub" id="modalSlotInfo">—</div>
-
-    <div class="form-group">
-      <label>Your name</label>
-      <input type="text" id="bookName" placeholder="Jane Doe" />
-    </div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="bookEmail" placeholder="you@example.com" />
-    </div>
-    <div class="form-group">
-      <label>Phone</label>
-      <input type="tel" id="bookPhone" placeholder="555 123 4567" />
-    </div>
-    <div class="form-group">
-      <label>Notes <span style="text-transform: none; letter-spacing: 0; color: var(--muted); font-weight: 400;">(optional)</span></label>
-      <textarea id="bookNotes" placeholder="Color requests, allergies, anything else"></textarea>
-    </div>
-    <div class="error-msg" id="bookingError">Please fill in all required fields.</div>
-    <button class="btn" id="confirmBookingBtn" style="margin-top: 1.25rem;">Confirm booking</button>
-    <button class="btn btn-ghost" id="cancelBookingBtn">Cancel</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<footer>
-  Noor <span class="nails-accent">Nails</span>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">Noor <span class="nails-accent">Nails</span></div>
+    <div class="footer-meta">Nail studio · By appointment</div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Noor Nails</span>
+      <button class="footer-admin" id="adminToggleBtn">Admin</button>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -999,13 +1045,63 @@ window.addEventListener('resize', updateHands);
   const ctx = canvas.getContext('2d');
   const SPACING = 9;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let dots = [], w = 0, h = 0;
+  let dots = [], w = 0, h = 0, dpr = 1;
+  let sprites = {};
+
+  // Pre-render each dot style once as a smooth, anti-aliased circle at the
+  // screen's real pixel density, then stamp it — crisp and fast.
+  function makeSprite(radius, paint) {
+    const pad = 2;
+    const size = Math.ceil((radius + pad) * 2 * dpr);
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const g = c.getContext('2d');
+    g.scale(dpr, dpr);
+    paint(g, size / dpr / 2, radius);
+    return { img: c, half: size / dpr / 2 };
+  }
+
+  function buildSprites() {
+    sprites.ink = makeSprite(0.85, (g, c, r) => {
+      g.fillStyle = 'rgb(13,5,9)';
+      g.beginPath(); g.arc(c, c, r, 0, Math.PI * 2); g.fill();
+    });
+    sprites.pink = makeSprite(1.05, (g, c, r) => {
+      g.fillStyle = 'rgb(255,77,133)';
+      g.beginPath(); g.arc(c, c, r, 0, Math.PI * 2); g.fill();
+    });
+    sprites.core = makeSprite(1.1, (g, c, r) => {
+      const grd = g.createRadialGradient(c, c, 0, c, c, r + 0.6);
+      grd.addColorStop(0, 'rgba(255,255,255,1)');
+      grd.addColorStop(0.6, 'rgba(255,214,230,1)');
+      grd.addColorStop(1, 'rgba(255,160,195,0)');
+      g.fillStyle = grd;
+      g.beginPath(); g.arc(c, c, r + 0.6, 0, Math.PI * 2); g.fill();
+    });
+    // four-point star glint for sparkle peaks
+    sprites.star = makeSprite(6, (g, c, r) => {
+      const grd = g.createRadialGradient(c, c, 0, c, c, r);
+      grd.addColorStop(0, 'rgba(255,255,255,0.95)');
+      grd.addColorStop(0.35, 'rgba(255,205,225,0.55)');
+      grd.addColorStop(1, 'rgba(255,180,210,0)');
+      g.fillStyle = grd;
+      g.beginPath();
+      g.moveTo(c, c - r);
+      g.quadraticCurveTo(c, c, c + r, c);
+      g.quadraticCurveTo(c, c, c, c + r);
+      g.quadraticCurveTo(c, c, c - r, c);
+      g.quadraticCurveTo(c, c, c, c - r);
+      g.fill();
+    });
+  }
 
   function build() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    dpr = Math.min(window.devicePixelRatio || 1, 3);
     w = window.innerWidth; h = window.innerHeight;
-    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.imageSmoothingQuality = 'high';
+    buildSprites();
     dots = [];
     for (let y = SPACING / 2; y < h + SPACING; y += SPACING) {
       for (let x = SPACING / 2; x < w + SPACING; x += SPACING) {
@@ -1018,10 +1114,15 @@ window.addEventListener('resize', updateHands);
           twinkle: 0.8 + Math.random() * 2.2,
           // most dots are ink, some pink, a few bright sparkles
           kind: r < 0.035 ? 2 : r < 0.14 ? 1 : 0,
-          size: 0.8 + Math.random() * 0.7
+          scale: 0.85 + Math.random() * 0.35
         });
       }
     }
+  }
+
+  function stamp(sp, x, y, scale) {
+    const hs = sp.half * scale;
+    ctx.drawImage(sp.img, x - hs, y - hs, hs * 2, hs * 2);
   }
 
   function draw(t) {
@@ -1032,24 +1133,22 @@ window.addEventListener('resize', updateHands);
       const y = d.y + Math.cos(s * d.speed * 0.8 + d.phase) * d.amp;
       const tw = 0.5 + 0.5 * Math.sin(s * d.twinkle + d.phase * 3);
       if (d.kind === 0) {
-        ctx.fillStyle = `rgba(13,5,9,${0.05 + 0.06 * tw})`;
-        ctx.fillRect(x, y, d.size, d.size);
+        ctx.globalAlpha = 0.07 + 0.08 * tw;
+        stamp(sprites.ink, x, y, d.scale);
       } else if (d.kind === 1) {
-        ctx.fillStyle = `rgba(255,77,133,${0.12 + 0.35 * tw})`;
-        ctx.fillRect(x, y, d.size + 0.4, d.size + 0.4);
+        ctx.globalAlpha = 0.18 + 0.45 * tw;
+        stamp(sprites.pink, x, y, d.scale);
       } else {
-        // sparkle: bright core with a soft cross when it peaks
         const a = Math.pow(tw, 3);
-        ctx.fillStyle = `rgba(255,${200 + 55 * a | 0},${225 + 30 * a | 0},${0.25 + 0.75 * a})`;
-        ctx.fillRect(x - 0.2, y - 0.2, 1.8, 1.8);
-        if (a > 0.55) {
-          const len = 1.5 + a * 3;
-          ctx.fillStyle = `rgba(255,220,235,${(a - 0.55) * 1.6})`;
-          ctx.fillRect(x + 0.7 - len, y + 0.5, len * 2, 0.7);
-          ctx.fillRect(x + 0.5, y + 0.7 - len, 0.7, len * 2);
+        ctx.globalAlpha = 0.35 + 0.65 * a;
+        stamp(sprites.core, x, y, d.scale);
+        if (a > 0.45) {
+          ctx.globalAlpha = (a - 0.45) * 1.8;
+          stamp(sprites.star, x, y, 0.5 + a * 0.6);
         }
       }
     }
+    ctx.globalAlpha = 1;
   }
 
   let last = 0;
@@ -1410,9 +1509,17 @@ async function checkIsAdmin() {
   return !error && data === true;
 }
 
+function openAdminOverlay() {
+  document.getElementById('adminOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeAdminOverlay() {
+  document.getElementById('adminOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
 async function enterAdmin() {
   isAdmin = true;
-  document.getElementById('adminToggleBtn').style.display = 'none';
   document.getElementById('adminLogin').classList.remove('active');
   document.getElementById('adminPanel').classList.add('active');
   await loadAdminData();
@@ -1426,12 +1533,13 @@ async function showAdminLogin() {
   const { data } = await db.auth.getSession();
   if (data.session && await checkIsAdmin()) {
     await enterAdmin();
-    document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    openAdminOverlay();
     return;
   }
-  document.getElementById('adminToggleBtn').style.display = 'none';
+  document.getElementById('adminPanel').classList.remove('active');
   document.getElementById('adminLogin').classList.add('active');
-  document.getElementById('adminLogin').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  openAdminOverlay();
+  document.getElementById('loginUser').focus();
 }
 
 async function attemptLogin() {
@@ -1467,7 +1575,7 @@ async function logout() {
   isAdmin = false;
   adminSlots = []; bookings = [];
   document.getElementById('adminPanel').classList.remove('active');
-  document.getElementById('adminToggleBtn').style.display = 'inline-block';
+  closeAdminOverlay();
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
 }
@@ -1490,7 +1598,15 @@ async function init() {
   await loadPublicSlots();
   renderAvailability();
 
+  document.getElementById('year').textContent = new Date().getFullYear();
   document.getElementById('adminToggleBtn').addEventListener('click', showAdminLogin);
+  document.getElementById('adminCloseBtn').addEventListener('click', closeAdminOverlay);
+  document.getElementById('adminOverlay').addEventListener('click', e => {
+    if (e.target.id === 'adminOverlay') closeAdminOverlay();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeAdminOverlay(); closeBookingModal(); }
+  });
   document.getElementById('loginBtn').addEventListener('click', attemptLogin);
   document.getElementById('logoutBtn').addEventListener('click', logout);
   document.getElementById('loginPass').addEventListener('keydown', e => {
