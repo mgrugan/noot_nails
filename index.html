@@ -74,6 +74,9 @@
     position: fixed;
     will-change: transform, opacity;
     pointer-events: none;
+    filter:
+      drop-shadow(0 20px 40px rgba(13, 5, 9, 0.2))
+      contrast(1.05);
   }
   .hand-left {
     bottom: -5vh;
@@ -89,13 +92,27 @@
     transform-origin: 80% 20%;
     z-index: 1;   /* behind the title */
   }
+  /* Intro zoom — on the <img> so it doesn't fight the scroll transform on .hand.
+     Front (left) hand flies in from in front of the screen; back (right) hand
+     rises up from the distance. */
+  .hand-left img  { transform-origin: 20% 80%; animation: zoomFromFront 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+  .hand-right img { transform-origin: 80% 20%; animation: zoomFromBack 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+  @keyframes zoomFromFront {
+    from { opacity: 0; transform: scale(2.6); filter: blur(10px); }
+    60%  { opacity: 1; }
+    to   { opacity: 1; transform: scale(1); filter: none; }
+  }
+  @keyframes zoomFromBack {
+    from { opacity: 0; transform: scale(0.35); filter: blur(6px); }
+    to   { opacity: 1; transform: scale(1); filter: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hand img { animation: none; }
+  }
   .hand img {
     width: 100%;
     height: auto;
     display: block;
-    filter:
-      drop-shadow(0 20px 40px rgba(13, 5, 9, 0.2))
-      contrast(1.05);
   }
 
   /* ============== HERO ============== */
