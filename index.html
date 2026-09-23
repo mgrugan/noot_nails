@@ -676,7 +676,7 @@
 
   .admin-form-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.4fr auto;
+    grid-template-columns: 1fr 0.9fr 0.9fr 1.2fr auto;
     gap: 1.5rem;
     align-items: end;
     padding: 1.5rem;
@@ -717,6 +717,33 @@
     background: var(--pink-soft);
     color: var(--pink-deep);
     border-color: transparent;
+  }
+
+  .slot-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+  .edit-btn { font-size: 0.8rem; }
+  .edit-btn:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+  .admin-slot-item.editing {
+    flex-wrap: wrap;
+    background: var(--bg);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--ink);
+  }
+  .slot-edit {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 1rem;
+    flex: 1 1 320px;
+  }
+  .slot-edit label { margin-bottom: 0.25rem; }
+  .slot-edit-actions { display: flex; gap: 0.5rem; align-items: flex-end; }
+  .btn-sm { width: auto; padding: 0.6rem 1rem; font-size: 0.7rem; margin: 0; }
+  .slot-edit-note { flex-basis: 100%; font-size: 0.78rem; color: var(--pink-deep); }
+  @media (max-width: 720px) {
+    .slot-edit { grid-template-columns: 1fr; }
+    .slot-edit-actions { flex-basis: 100%; }
+    .slot-edit-actions .btn-sm { flex: 1; }
   }
 
   .booking-item { padding: 1.25rem 0; }
@@ -1031,8 +1058,12 @@
               <input type="time" id="newTime" />
             </div>
             <div class="form-group">
-              <label>Service</label>
-              <input type="text" id="newService" placeholder="Gel manicure" />
+              <label>Length</label>
+              <select id="newDuration"></select>
+            </div>
+            <div class="form-group">
+              <label>Label</label>
+              <input type="text" id="newService" placeholder="2-hour session" />
             </div>
             <button class="btn" id="addSlotBtn">Add slot</button>
           </div>
@@ -1457,6 +1488,12 @@ window.addEventListener('resize', () => {
   resizeTimer = setTimeout(renderAvailability, 200);
 });
 
+const DURATIONS = [60, 90, 120, 150, 180];
+const durationLabel = m => m % 60 ? `${Math.floor(m / 60)}½ hours` : `${m / 60} hour${m === 60 ? '' : 's'}`;
+const durationOptions = selected => DURATIONS.map(m =>
+  `<option value="${m}"${m === selected ? ' selected' : ''}>${durationLabel(m)}</option>`).join('');
+let editingSlotId = null;
+
 function renderAdminSlots() {
   const list = document.getElementById('adminSlotsList');
   const now = new Date();
@@ -1470,18 +1507,46 @@ function renderAdminSlots() {
   list.innerHTML = sorted.map(slot => {
     const isPast = slotDate(slot) < now;
     const tags = [slot.booked ? 'booked' : '', isPast ? 'past' : ''].filter(Boolean).join(' · ');
+    const id = escapeHtml(slot.id);
+    if (slot.id === editingSlotId) {
+      return `
+      <div class="admin-slot-item editing">
+        <div class="slot-edit">
+          <div><label>Date</label><input type="date" id="editDate" value="${escapeHtml(slot.date)}" /></div>
+          <div><label>Start</label><input type="time" id="editTime" value="${escapeHtml(slot.time.slice(0, 5))}" /></div>
+          <div><label>Length</label><select id="editDuration">${durationOptions(slot.duration_minutes || 120)}</select></div>
+        </div>
+        <div class="slot-edit-actions">
+          <button class="btn btn-sm" data-save-slot="${id}">Save</button>
+          <button class="btn btn-ghost btn-sm" data-cancel-edit>Cancel</button>
+        </div>
+        ${slot.booked ? '<div class="slot-edit-note">This time is booked — saving moves the client\'s appointment too. Let them know!</div>' : ''}
+      </div>`;
+    }
     return `
       <div class="admin-slot-item" style="${isPast || slot.booked ? 'opacity: 0.45;' : ''}">
         <div class="admin-slot-info">
           <div class="slot-when">${formatDate(slot.date)} · ${formatRange(slot)}</div>
           <div class="slot-detail">${escapeHtml(slot.service || 'No service specified')}${tags ? ' · ' + tags : ''}</div>
         </div>
-        <button class="delete-btn" data-del-slot="${escapeHtml(slot.id)}" title="Delete">×</button>
+        <div class="slot-actions">
+          <button class="delete-btn edit-btn" data-edit-slot="${id}" title="Edit">✎</button>
+          <button class="delete-btn" data-del-slot="${id}" title="Delete">×</button>
+        </div>
       </div>`;
   }).join('');
 
   list.querySelectorAll('[data-del-slot]').forEach(btn => {
     btn.addEventListener('click', () => deleteSlot(btn.dataset.delSlot));
+  });
+  list.querySelectorAll('[data-edit-slot]').forEach(btn => {
+    btn.addEventListener('click', () => { editingSlotId = btn.dataset.editSlot; renderAdminSlots(); });
+  });
+  list.querySelectorAll('[data-cancel-edit]').forEach(btn => {
+    btn.addEventListener('click', () => { editingSlotId = null; renderAdminSlots(); });
+  });
+  list.querySelectorAll('[data-save-slot]').forEach(btn => {
+    btn.addEventListener('click', () => saveSlotEdit(btn.dataset.saveSlot));
   });
 }
 
@@ -1520,9 +1585,10 @@ async function addSlot() {
   const date = document.getElementById('newDate').value;
   const time = document.getElementById('newTime').value;
   const service = document.getElementById('newService').value.trim();
+  const duration_minutes = parseInt(document.getElementById('newDuration').value, 10);
   if (!date || !time) { showToast('Date and time required'); return; }
 
-  const { error } = await db.from('slots').insert({ date, time, service });
+  const { error } = await db.from('slots').insert({ date, time, service, duration_minutes });
   if (error) {
     showToast(error.code === '23505' ? 'That slot already exists' : 'Could not add slot');
     console.error(error);
@@ -1533,6 +1599,30 @@ async function addSlot() {
   document.getElementById('newService').value = '';
   await refreshAll();
   showToast('Slot added');
+}
+
+async function saveSlotEdit(id) {
+  const slot = adminSlots.find(s => s.id === id);
+  if (!slot) return;
+  const date = document.getElementById('editDate').value;
+  const time = document.getElementById('editTime').value;
+  const duration_minutes = parseInt(document.getElementById('editDuration').value, 10);
+  if (!date || !time) { showToast('Date and time required'); return; }
+
+  const { error } = await db.from('slots').update({ date, time, duration_minutes }).eq('id', id);
+  if (error) {
+    showToast(error.code === '23505' ? 'Another slot already starts then' : 'Could not save changes');
+    console.error(error);
+    return;
+  }
+  if (slot.booked) {
+    // keep the client's booking in step with the moved slot
+    const res = await db.from('bookings').update({ date, time }).eq('slot_id', id);
+    if (res.error) console.error(res.error);
+  }
+  editingSlotId = null;
+  await refreshAll();
+  showToast(slot.booked ? 'Moved — let the client know' : 'Slot updated');
 }
 
 async function deleteSlot(id) {
@@ -1757,6 +1847,7 @@ function setupTabs() {
 async function init() {
   setupTabs();
   renderPricePicker();
+  document.getElementById('newDuration').innerHTML = durationOptions(120);
   updateHands();
   await loadPublicSlots();
   renderAvailability();
