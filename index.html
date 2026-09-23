@@ -219,6 +219,10 @@
     height: 32px;
     background: linear-gradient(180deg, var(--ink), transparent);
   }
+  @keyframes bounceY {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
   @keyframes bounce {
     0%, 100% { transform: translateX(-50%) translateY(0); }
     50%      { transform: translateX(-50%) translateY(6px); }
@@ -886,15 +890,14 @@
     .tab-bar { gap: 1.25rem; overflow-x: auto; }
     .hero { padding: 25vh 1.5rem 2rem; }
     .lede { font-size: 1rem; white-space: nowrap; }
+    /* On phones, sit just under the tagline so it's always on screen and clear of the hand */
     .scroll-hint {
-      bottom: calc(5.5rem + env(safe-area-inset-bottom));
-      background: var(--surface);
-      border: 1px solid var(--ink);
-      border-radius: 999px;
-      padding: 0.55rem 1.1rem;
-      box-shadow: 2px 2px 0 var(--ink);
+      position: relative;
+      bottom: auto;
+      left: auto;
+      margin-top: 2.25rem;
+      animation-name: bounceY;
     }
-    .scroll-hint::after { display: none; }
     .booking-card, .admin-panel-card, .admin-login-card, .modal {
       box-shadow: 4px 4px 0 var(--ink);
     }
