@@ -1096,8 +1096,8 @@ function updateHands() {
   handLeft.style.transform = `translate3d(${leftX}px, ${leftY}px, 0) scale(${leftScale})`;
   handLeft.style.opacity = leftOpacity;
 
-  const rightStart = vh * 0.25;
-  const rightEnd   = vh * 0.70;
+  const rightStart = vh * 0.08;
+  const rightEnd   = vh * 0.53;
   const rightP = Math.max(0, Math.min((scrollY - rightStart) / (rightEnd - rightStart), 1));
   const rightScale = 1 + rightP * 1.2;
   const rightX = rightP * 160;
