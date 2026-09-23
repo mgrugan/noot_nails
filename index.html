@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Noor Nails</title>
+<title>Noot Nails</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -152,7 +152,7 @@
     background: var(--ink);
   }
 
-  /* MAIN TITLE — "Noor Nails" in bubble font */
+  /* MAIN TITLE — "Noot Nails" in bubble font */
   h1 {
     font-family: 'Bagel Fat One', system-ui, sans-serif;
     font-weight: 400;
@@ -473,7 +473,7 @@
     border: 1px solid var(--ink);
     border-radius: var(--radius-lg);
     padding: 2.5rem;
-    max-width: 460px;
+    max-width: 520px;
     width: 100%;
     box-shadow:
       6px 6px 0 var(--ink),
@@ -500,6 +500,71 @@
     margin-bottom: 2rem;
     padding-bottom: 1.25rem;
     border-bottom: 1px solid var(--line);
+  }
+
+  /* PRICE PICKER */
+  .req {
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--muted);
+    font-weight: 400;
+    margin-left: 0.35rem;
+  }
+  .choice-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.2rem;
+  }
+  .choice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 10px;
+    background: var(--bg);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    margin: 0;
+    transition: background 0.15s, color 0.15s, box-shadow 0.15s, transform 0.15s;
+    user-select: none;
+  }
+  .choice input { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+  .choice .price { font-family: 'Newsreader', serif; font-style: italic; font-weight: 500; color: var(--pink-deep); }
+  .choice:hover { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 var(--ink); }
+  .choice:has(input:checked) { background: var(--ink); color: var(--surface); box-shadow: 2px 2px 0 var(--pink); }
+  .choice:has(input:checked) .price { color: var(--bubble-pink); }
+  .choice:has(input:focus-visible) { outline: 2px solid var(--pink); outline-offset: 2px; }
+
+  .total-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0 1.25rem;
+    padding: 1rem 1.1rem;
+    border: 1.5px dashed var(--pink);
+    border-radius: 12px;
+    background: var(--pink-pale);
+  }
+  .total-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .total-note { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.2rem; line-height: 1.4; }
+  .total-amount {
+    font-family: 'Bagel Fat One', sans-serif;
+    font-size: 2.2rem;
+    line-height: 1;
+    color: var(--pink);
+    -webkit-text-stroke: 1.5px var(--ink);
   }
 
   /* FORMS */
@@ -841,7 +906,7 @@
       Nail studio · By appointment
     </div>
     <div class="pre-title reveal reveal-2">welcome to <span class="star">✦</span></div>
-    <h1 class="reveal reveal-2">Noor <span class="nails">Nails</span></h1>
+    <h1 class="reveal reveal-2">Noot <span class="nails">Nails</span></h1>
     <p class="lede reveal reveal-3">An unhurried hour, considered details, color that lasts. Book a time that's just yours.</p>
   </div>
   <div class="scroll-hint">
@@ -873,6 +938,22 @@
   <div class="modal">
     <div class="modal-header">Reserve your <span class="display-i" style="color: var(--pink);">time</span></div>
     <div class="modal-sub" id="modalSlotInfo">—</div>
+
+    <div class="form-group">
+      <label>GelX extensions <span class="req">choose one</span></label>
+      <div class="choice-grid" id="serviceChoices"></div>
+    </div>
+    <div class="form-group">
+      <label>Designs <span class="req">optional · pick any</span></label>
+      <div class="choice-grid" id="designChoices"></div>
+    </div>
+    <div class="total-bar">
+      <div>
+        <div class="total-label">Your total</div>
+        <div class="total-note">Paid in person at your appointment — nothing is charged online.</div>
+      </div>
+      <div class="total-amount" id="totalAmount">$0</div>
+    </div>
 
     <div class="form-group">
       <label>Your name</label>
@@ -978,10 +1059,10 @@
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-brand">Noor <span class="nails-accent">Nails</span></div>
+    <div class="footer-brand">Noot <span class="nails-accent">Nails</span></div>
     <div class="footer-meta">Nail studio · By appointment</div>
     <div class="footer-bottom">
-      <span>© <span id="year"></span> Noor Nails</span>
+      <span>© <span id="year"></span> Noot Nails</span>
       <button class="footer-admin" id="adminToggleBtn">Admin</button>
     </div>
   </div>
@@ -1182,8 +1263,11 @@ let isAdmin = false;
 
 async function loadPublicSlots() {
   if (!db) { availableSlots = []; return; }
+  // Tops up the rolling window of weekday 2-hour sessions (no-op if already filled).
+  const fill = await db.rpc('autofill_slots');
+  if (fill.error) console.warn('autofill_slots:', fill.error.message);
   const { data, error } = await db.from('slots')
-    .select('id, date, time, service')
+    .select('*')
     .eq('booked', false);
   if (error) { console.error(error); availableSlots = []; return; }
   availableSlots = data;
@@ -1191,7 +1275,7 @@ async function loadPublicSlots() {
 
 async function loadAdminData() {
   const [slotsRes, bookingsRes, settingsRes] = await Promise.all([
-    db.from('slots').select('id, date, time, service, booked'),
+    db.from('slots').select('*'),
     db.from('bookings').select('*').order('created_at', { ascending: false }),
     db.from('settings').select('value').eq('key', 'notify_email').maybeSingle()
   ]);
@@ -1230,10 +1314,61 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3500);
 }
 
+/* PRICES — keep in sync with book_slot() in supabase/002_sessions_and_pricing.sql */
+const NAIL_SERVICES = [
+  { id: 'short',   label: 'Short',         price: 30 },
+  { id: 'medium',  label: 'Medium',        price: 35 },
+  { id: 'long',    label: 'Long',          price: 40 },
+  { id: 'xl',      label: 'XL',            price: 40 },
+  { id: 'natural', label: 'Natural nails', price: 30 },
+];
+const DESIGNS = [
+  { id: 'french', label: 'Basic French',  price: 5 },
+  { id: 'dots',   label: 'Dots / stripes', price: 2 },
+  { id: 'art',    label: 'Nail art',      price: 5 },
+  { id: '3d',     label: '3D gel art',    price: 5 },
+  { id: 'charms', label: 'Charms / gems', price: 0 },
+];
+const priceText = p => p === 0 ? 'Free' : `$${p}`;
+const labelFor = (list, id) => (list.find(x => x.id === id) || {}).label || id;
+
+function renderPricePicker() {
+  document.getElementById('serviceChoices').innerHTML = NAIL_SERVICES.map(o => `
+    <label class="choice"><input type="radio" name="nailService" value="${o.id}" />
+      <span>${o.label}</span><span class="price">${priceText(o.price)}</span></label>`).join('');
+  document.getElementById('designChoices').innerHTML = DESIGNS.map(o => `
+    <label class="choice"><input type="checkbox" name="design" value="${o.id}" />
+      <span>${o.label}</span><span class="price">${o.price === 0 ? 'Free' : '+$' + o.price}</span></label>`).join('');
+  document.querySelectorAll('#serviceChoices input, #designChoices input')
+    .forEach(i => i.addEventListener('change', updateTotal));
+}
+
+function currentSelection() {
+  const svc = document.querySelector('input[name="nailService"]:checked');
+  const designs = [...document.querySelectorAll('input[name="design"]:checked')].map(i => i.value);
+  const base = svc ? NAIL_SERVICES.find(o => o.id === svc.value).price : 0;
+  const extra = designs.reduce((sum, id) => sum + DESIGNS.find(o => o.id === id).price, 0);
+  return { service: svc ? svc.value : null, designs, total: base + extra };
+}
+
+function updateTotal() {
+  document.getElementById('totalAmount').textContent = `$${currentSelection().total}`;
+}
+
+function formatRange(slot) {
+  const start = formatTime(slot.time);
+  if (!slot.duration_minutes) return start;
+  const [h, m] = slot.time.split(':').map(Number);
+  const end = h * 60 + m + slot.duration_minutes;
+  const hh = String(Math.floor(end / 60) % 24).padStart(2, '0');
+  const mm = String(end % 60).padStart(2, '0');
+  return `${start} – ${formatTime(`${hh}:${mm}`)}`;
+}
+
 /* Filler card variants — pulled from a small pool of cute prompts */
 const FILLER_VARIANTS = [
   { icon: '✦', text: 'More times opening soon', sub: 'Check back ♡' },
-  { icon: '♡', text: 'Follow on Instagram for openings', sub: '@noor.nailstudio' },
+  { icon: '♡', text: 'Follow on Instagram for openings', sub: '@nootnails' },
   { icon: '✿', text: 'Slots refresh weekly', sub: 'Stay tuned' },
   { icon: '✧', text: 'New times added every Sunday', sub: 'Coming soon' },
 ];
@@ -1278,7 +1413,7 @@ function renderAvailability() {
         <div class="slot-date">${formatDate(slot.date)}</div>
       </div>
       <div class="slot-bottom">
-        <div class="slot-time">${formatTime(slot.time)}</div>
+        <div class="slot-time">${formatRange(slot)}</div>
         ${slot.service ? `<div class="slot-service">${escapeHtml(slot.service)}</div>` : ''}
       </div>
     </div>
@@ -1329,7 +1464,7 @@ function renderAdminSlots() {
     return `
       <div class="admin-slot-item" style="${isPast || slot.booked ? 'opacity: 0.45;' : ''}">
         <div class="admin-slot-info">
-          <div class="slot-when">${formatDate(slot.date)} · ${formatTime(slot.time)}</div>
+          <div class="slot-when">${formatDate(slot.date)} · ${formatRange(slot)}</div>
           <div class="slot-detail">${escapeHtml(slot.service || 'No service specified')}${tags ? ' · ' + tags : ''}</div>
         </div>
         <button class="delete-btn" data-del-slot="${escapeHtml(slot.id)}" title="Delete">×</button>
@@ -1351,7 +1486,8 @@ function renderAdminBookings() {
     <div class="booking-item">
       <div class="booking-info">
         <div class="booking-name">${escapeHtml(b.name)}</div>
-        <div class="booking-when">${formatDate(b.date)} · ${formatTime(b.time)}${b.service ? ' · ' + escapeHtml(b.service) : ''}</div>
+        <div class="booking-when">${formatDate(b.date)} · ${formatTime(b.time)}${b.total != null ? ' · $' + b.total + ' due in person' : ''}</div>
+        ${b.nail_service ? `<div class="booking-meta">${escapeHtml(labelFor(NAIL_SERVICES, b.nail_service))}${(b.designs || []).length ? ' + ' + b.designs.map(d => escapeHtml(labelFor(DESIGNS, d))).join(', ') : ''}</div>` : ''}
         <div class="booking-meta">
           ${escapeHtml(b.email)} &nbsp;·&nbsp; ${escapeHtml(b.phone)}
           ${b.notes ? '<br>' + escapeHtml(b.notes) : ''}
@@ -1402,8 +1538,10 @@ function openBookingModal(slotId) {
   selectedSlot = availableSlots.find(s => s.id === slotId);
   if (!selectedSlot) return;
   document.getElementById('modalSlotInfo').textContent =
-    `${formatWeekday(selectedSlot.date)}, ${formatDate(selectedSlot.date)} · ${formatTime(selectedSlot.time)}${selectedSlot.service ? ' · ' + selectedSlot.service : ''}`;
+    `${formatWeekday(selectedSlot.date)}, ${formatDate(selectedSlot.date)} · ${formatRange(selectedSlot)}`;
   ['bookName','bookEmail','bookPhone','bookNotes'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('#serviceChoices input, #designChoices input').forEach(i => i.checked = false);
+  updateTotal();
   document.getElementById('bookingError').classList.remove('show');
   document.getElementById('bookingModal').classList.add('active');
 }
@@ -1420,6 +1558,12 @@ async function confirmBooking() {
   const notes = document.getElementById('bookNotes').value.trim();
   const errEl = document.getElementById('bookingError');
 
+  const picks = currentSelection();
+  if (!picks.service) {
+    errEl.textContent = 'Please choose a nail service.';
+    errEl.classList.add('show');
+    return;
+  }
   if (!name || !email || !phone) {
     errEl.textContent = 'Please fill in name, email, and phone.';
     errEl.classList.add('show');
@@ -1439,7 +1583,8 @@ async function confirmBooking() {
   // The server books the slot atomically, so two people can't grab the same time.
   const slot = selectedSlot;
   const { data, error } = await db.rpc('book_slot', {
-    p_slot_id: slot.id, p_name: name, p_email: email, p_phone: phone, p_notes: notes
+    p_slot_id: slot.id, p_name: name, p_email: email, p_phone: phone, p_notes: notes,
+    p_nail_service: picks.service, p_designs: picks.designs
   });
 
   btn.disabled = false;
@@ -1452,29 +1597,36 @@ async function confirmBooking() {
     return;
   }
 
-  const booking = { ...slot, name, email, phone, notes, createdAt: new Date().toISOString() };
+  const total = data && data.total != null ? data.total : picks.total;
+  const booking = {
+    ...slot, name, email, phone, notes, total,
+    picks: labelFor(NAIL_SERVICES, picks.service) +
+      (picks.designs.length ? ' + ' + picks.designs.map(d => labelFor(DESIGNS, d)).join(', ') : ''),
+    createdAt: new Date().toISOString()
+  };
   if (data && data.notify_email) {
     sendNotificationEmail(data.notify_email, booking).catch(err => console.error('Email send failed:', err));
   }
 
   closeBookingModal();
   await refreshAll();
-  showToast(`Booked — see you ${formatDate(booking.date)}`);
+  showToast(`Booked — $${total} due in person on ${formatDate(booking.date)}`);
 }
 
 async function sendNotificationEmail(to, booking) {
   if (!to || !to.includes('@')) return;
   const subject = `New booking: ${booking.name} — ${formatDate(booking.date)}`;
   const message =
-`A new appointment has been booked at Noor Nails.
+`A new appointment has been booked at Noot Nails.
 
 Client: ${booking.name}
 Email:  ${booking.email}
 Phone:  ${booking.phone}
 
 Date:    ${formatDate(booking.date)}
-Time:    ${formatTime(booking.time)}
-Service: ${booking.service || '(not specified)'}
+Time:    ${formatRange(booking)}
+Service: ${booking.picks}
+Total:   $${booking.total} (to be paid in person)
 
 Notes:
 ${booking.notes || '(none)'}
@@ -1488,8 +1640,9 @@ Booked at: ${new Date(booking.createdAt).toLocaleString()}`;
   formData.append('name', booking.name);
   formData.append('email', booking.email);
   formData.append('phone', booking.phone);
-  formData.append('appointment', `${formatDate(booking.date)} at ${formatTime(booking.time)}`);
-  formData.append('service', booking.service || 'Not specified');
+  formData.append('appointment', `${formatDate(booking.date)}, ${formatRange(booking)}`);
+  formData.append('service', booking.picks);
+  formData.append('total', `$${booking.total} (paid in person)`);
   formData.append('notes', booking.notes || 'None');
   formData.append('message', message);
 
@@ -1594,6 +1747,7 @@ function setupTabs() {
 
 async function init() {
   setupTabs();
+  renderPricePicker();
   updateHands();
   await loadPublicSlots();
   renderAvailability();

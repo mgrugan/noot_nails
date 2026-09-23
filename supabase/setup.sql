@@ -1,4 +1,4 @@
--- Noor Nails — Supabase setup
+-- Noot Nails — Supabase setup
 -- Run this once in: Supabase dashboard → SQL Editor → New query → paste → Run.
 --
 -- Security model:

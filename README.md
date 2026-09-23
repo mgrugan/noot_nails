@@ -1,8 +1,8 @@
-# Noor Nails
+# Noot Nails
 
-Static site for Noor Nails, served with GitHub Pages.
+Static site for Noot Nails, served with GitHub Pages.
 
-Live site: https://mgrugan.github.io/noot_nails/
+Live site: https://nootnails.com (also https://mgrugan.github.io/noot_nails/)
 
 ## Booking backend (Supabase)
 
@@ -22,4 +22,7 @@ The page holds no passwords — admin access is enforced by database rules.
    `SUPABASE_URL` and `SUPABASE_ANON_KEY` near the bottom of `index.html`.
    (The anon key is designed to be public; the rules in `setup.sql` decide what it can do.)
 
-Then open the site → **Admin Access** → sign in with that email and password.
+7. Run [`supabase/002_sessions_and_pricing.sql`](supabase/002_sessions_and_pricing.sql) the same way
+   (automatic weekday 2-hour sessions 3–9pm + the price picker).
+
+Then open the site → **Admin** (footer) → sign in with that email and password.
