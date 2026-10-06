@@ -93,7 +93,7 @@ begin
 
   v_total := case p_nail_service
     when 'short'   then 30
-    when 'medium'  then 35
+    when 'medium'  then 40
     when 'long'    then 40
     when 'xl'      then 40
     when 'natural' then 30

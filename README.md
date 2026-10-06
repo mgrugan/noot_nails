@@ -24,5 +24,7 @@ The page holds no passwords — admin access is enforced by database rules.
 
 7. Run [`supabase/002_sessions_and_pricing.sql`](supabase/002_sessions_and_pricing.sql) the same way
    (automatic weekday 2-hour sessions 3–9pm + the price picker).
+8. Run [`supabase/003_medium_price_and_notify.sql`](supabase/003_medium_price_and_notify.sql)
+   (Medium → $40, booking emails to noor.nagi07@gmail.com).
 
 Then open the site → **Admin** (footer) → sign in with that email and password.
