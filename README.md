@@ -34,5 +34,7 @@ The page holds no passwords — admin access is enforced by database rules.
     (booking emails sent by the database instead of the visitor's browser).
 12. Run [`supabase/007_cancel_booking.sql`](supabase/007_cancel_booking.sql)
     (admins can cancel a booking; its time goes back into availability).
+13. Run [`supabase/008_evening_6_to_8.sql`](supabase/008_evening_6_to_8.sql)
+    (open 7–9pm sessions move to 6–8pm; future auto-fill uses 6pm).
 
 Then open the site → **Admin** (footer) → sign in with that email and password.
