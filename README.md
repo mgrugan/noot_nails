@@ -28,5 +28,7 @@ The page holds no passwords — admin access is enforced by database rules.
    (Medium → $40, booking emails to noor.nagi07@gmail.com).
 9. Run [`supabase/004_charms_and_removal.sql`](supabase/004_charms_and_removal.sql)
    (charms/gems → $5, removal add-on $15).
+10. Run [`supabase/005_short_xl_prices.sql`](supabase/005_short_xl_prices.sql)
+    (Short → $35, XL → $45).
 
 Then open the site → **Admin** (footer) → sign in with that email and password.

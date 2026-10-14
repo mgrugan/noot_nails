@@ -1360,10 +1360,10 @@ function showToast(msg) {
 
 /* PRICES — keep in sync with book_slot() in supabase/002_sessions_and_pricing.sql */
 const NAIL_SERVICES = [
-  { id: 'short',   label: 'Short',         price: 30 },
+  { id: 'short',   label: 'Short',         price: 35 },
   { id: 'medium',  label: 'Medium',        price: 40 },
   { id: 'long',    label: 'Long',          price: 40 },
-  { id: 'xl',      label: 'XL',            price: 40 },
+  { id: 'xl',      label: 'XL',            price: 45 },
   { id: 'natural', label: 'Natural nails', price: 30 },
 ];
 const DESIGNS = [
@@ -1374,7 +1374,7 @@ const DESIGNS = [
   { id: 'charms', label: 'Charms / gems', price: 5 },
 ];
 const EXTRAS = [
-  { id: 'removal', label: 'Removal', price: 15 },
+  { id: 'removal', label: 'Existing nail removal', price: 15 },
 ];
 const ADDONS = [...DESIGNS, ...EXTRAS];   // designs + extras share one list server-side
 const priceText = p => p === 0 ? 'Free' : `$${p}`;
