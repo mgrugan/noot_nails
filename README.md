@@ -32,5 +32,7 @@ The page holds no passwords — admin access is enforced by database rules.
     (Short → $35, XL → $45).
 11. Run [`supabase/006_server_side_booking_email.sql`](supabase/006_server_side_booking_email.sql)
     (booking emails sent by the database instead of the visitor's browser).
+12. Run [`supabase/007_cancel_booking.sql`](supabase/007_cancel_booking.sql)
+    (admins can cancel a booking; its time goes back into availability).
 
 Then open the site → **Admin** (footer) → sign in with that email and password.
