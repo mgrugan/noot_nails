@@ -36,5 +36,7 @@ The page holds no passwords — admin access is enforced by database rules.
     (admins can cancel a booking; its time goes back into availability).
 13. Run [`supabase/008_evening_6_to_8.sql`](supabase/008_evening_6_to_8.sql)
     (open 7–9pm sessions move to 6–8pm; future auto-fill uses 6pm).
+14. Run [`supabase/009_two_sessions_3_and_6.sql`](supabase/009_two_sessions_3_and_6.sql)
+    (only 3–5pm and 6–8pm each weekday; supersedes 008).
 
 Then open the site → **Admin** (footer) → sign in with that email and password.
