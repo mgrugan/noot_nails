@@ -26,5 +26,7 @@ The page holds no passwords — admin access is enforced by database rules.
    (automatic weekday 2-hour sessions 3–9pm + the price picker).
 8. Run [`supabase/003_medium_price_and_notify.sql`](supabase/003_medium_price_and_notify.sql)
    (Medium → $40, booking emails to noor.nagi07@gmail.com).
+9. Run [`supabase/004_charms_and_removal.sql`](supabase/004_charms_and_removal.sql)
+   (charms/gems → $5, removal add-on $15).
 
 Then open the site → **Admin** (footer) → sign in with that email and password.
