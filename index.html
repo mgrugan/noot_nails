@@ -1707,58 +1707,11 @@ async function confirmBooking() {
   }
 
   const total = data && data.total != null ? data.total : picks.total;
-  const booking = {
-    ...slot, name, email, phone, notes, total,
-    picks: labelFor(NAIL_SERVICES, picks.service) +
-      (picks.designs.length ? ' + ' + picks.designs.map(d => labelFor(ADDONS, d)).join(', ') : ''),
-    createdAt: new Date().toISOString()
-  };
-  if (data && data.notify_email) {
-    sendNotificationEmail(data.notify_email, booking).catch(err => console.error('Email send failed:', err));
-  }
+  // The booking email to the studio is sent by the database (see supabase/006).
 
   closeBookingModal();
   await refreshAll();
-  showToast(`Booked — $${total} due in person on ${formatDate(booking.date)}`);
-}
-
-async function sendNotificationEmail(to, booking) {
-  if (!to || !to.includes('@')) return;
-  const subject = `New booking: ${booking.name} — ${formatDate(booking.date)}`;
-  const message =
-`A new appointment has been booked at Noot Nails.
-
-Client: ${booking.name}
-Email:  ${booking.email}
-Phone:  ${booking.phone}
-
-Date:    ${formatDate(booking.date)}
-Time:    ${formatRange(booking)}
-Service: ${booking.picks}
-Total:   $${booking.total} (to be paid in person)
-
-Notes:
-${booking.notes || '(none)'}
-
-Booked at: ${new Date(booking.createdAt).toLocaleString()}`;
-
-  const formData = new FormData();
-  formData.append('_subject', subject);
-  formData.append('_template', 'box');
-  formData.append('_captcha', 'false');
-  formData.append('name', booking.name);
-  formData.append('email', booking.email);
-  formData.append('phone', booking.phone);
-  formData.append('appointment', `${formatDate(booking.date)}, ${formatRange(booking)}`);
-  formData.append('service', booking.picks);
-  formData.append('total', `$${booking.total} (paid in person)`);
-  formData.append('notes', booking.notes || 'None');
-  formData.append('message', message);
-
-  await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`, {
-    method: 'POST',
-    body: formData
-  });
+  showToast(`Booked — $${total} due in person on ${formatDate(slot.date)}`);
 }
 
 /* ============================================================

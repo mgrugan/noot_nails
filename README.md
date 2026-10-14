@@ -30,5 +30,7 @@ The page holds no passwords — admin access is enforced by database rules.
    (charms/gems → $5, removal add-on $15).
 10. Run [`supabase/005_short_xl_prices.sql`](supabase/005_short_xl_prices.sql)
     (Short → $35, XL → $45).
+11. Run [`supabase/006_server_side_booking_email.sql`](supabase/006_server_side_booking_email.sql)
+    (booking emails sent by the database instead of the visitor's browser).
 
 Then open the site → **Admin** (footer) → sign in with that email and password.
